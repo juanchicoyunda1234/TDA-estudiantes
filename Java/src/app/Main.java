@@ -14,7 +14,9 @@ public class Main {
             System.out.println("2.- Registro de calificaciones.");
             System.out.println("3.- Determinar el promedio de notas de un estudiante.");
             System.out.println("4.- Determinar el promedio de notas del curso.");
-            System.out.print("Teclee su opcion (1-4): ");
+            System.out.println("5.- Salir.");
+            System.out.print("Teclee su opcion (1-5): ");
+            if (!sc.hasNextLine()) break;
             opcion = leerInt();
 
             switch (opcion) {
@@ -22,9 +24,10 @@ public class Main {
                 case 2: opcionCalificaciones(); break;
                 case 3: opcionPromedioEstudiante(); break;
                 case 4: opcionPromedioCurso(); break;
+                case 5: return;
                 default: System.out.println("Opcion no valida."); break;
             }
-        } while (opcion >= 1 && opcion <= 4);
+        } while (true);
     }
 
     private static String pedirFecha() {
@@ -46,7 +49,6 @@ public class Main {
         }
     }
 
-    // OPCION 1
     private static void opcionEstudiantes() {
         listar();
         System.out.println("\n-- Submenu Estudiantes --");
@@ -64,9 +66,9 @@ public class Main {
                         System.out.println("No se permite insertar, cupo de 20 alcanzado.");
                         break;
                     }
-                    System.out.print("Cedula (10 digitos): "); String ced = sc.nextLine();
-                    System.out.print("Nombres: "); String nom = sc.nextLine();
-                    System.out.print("Apellidos: "); String ape = sc.nextLine();
+                    System.out.print("Cedula (10 digitos): "); String ced = leerLinea();
+                    System.out.print("Nombres: "); String nom = leerLinea();
+                    System.out.print("Apellidos: "); String ape = leerLinea();
                     System.out.println("Fecha nacimiento: ");
                     String fec = pedirFecha();
                     try {
@@ -84,9 +86,9 @@ public class Main {
                     Estudiante actual = curso.obtener(idx);
                     if (actual == null) { System.out.println("Autonumerico no existe."); }
                     else {
-                        System.out.print("Nueva Cedula [" + actual.getCedula() + "]: "); String ced = sc.nextLine();
-                        System.out.print("Nuevos Nombres [" + actual.getNombres() + "]: "); String nom = sc.nextLine();
-                        System.out.print("Nuevos Apellidos [" + actual.getApellidos() + "]: "); String ape = sc.nextLine();
+                        System.out.print("Nueva Cedula [" + actual.getCedula() + "]: "); String ced = leerLinea();
+                        System.out.print("Nuevos Nombres [" + actual.getNombres() + "]: "); String nom = leerLinea();
+                        System.out.print("Nuevos Apellidos [" + actual.getApellidos() + "]: "); String ape = leerLinea();
                         String fec = actual.getFechaNacimientoTexto();
                         if (preguntar("Cambiar fecha? s/n: ")) { System.out.println("Nueva fecha:"); fec = pedirFecha(); }
 
@@ -103,8 +105,8 @@ public class Main {
                 break;
 
             case 3:
-                if (curso.getTope() == 0) { System.out.println("No se permite eliminar, no hay estudiantes registrados."); return; }
                 do {
+                    if (curso.getTope() == 0) { System.out.println("No se permite eliminar, no hay estudiantes registrados."); break; }
                     System.out.print("Autonumerico a eliminar: "); int idx = leerInt() - 1;
                     if (curso.eliminar(idx)) System.out.println("Eliminado.");
                     else System.out.println("Autonumerico no valido.");
@@ -113,11 +115,10 @@ public class Main {
         }
     }
 
-    // OPCION 2
     private static void opcionCalificaciones() {
         while (true) {
             System.out.print("\nIngrese cedula del estudiante: ");
-            String ced = sc.nextLine();
+            String ced = leerLinea();
             int idx = curso.buscar(ced);
             if (idx == -1) {
                 System.out.println("Estudiante no registrado.");
@@ -134,10 +135,6 @@ public class Main {
                 if (notas.length == 0) System.out.println(" - sin notas -");
                 else for (int i = 0; i < notas.length; i++) System.out.println(" " + (i+1) + ". " + notas[i]);
 
-                if (e.getTope() >= Estudiante.MAX_CALIFICACIONES) {
-                    System.out.println("Se han ingresado todas las calificaciones posibles");
-                    break;
-                }
                 System.out.println("\n1. Insertar 2. Modificar 3. Eliminar 4. Volver/Buscar otro");
                 System.out.print("Opcion: "); op = leerInt();
                 switch (op) {
@@ -164,9 +161,8 @@ public class Main {
         }
     }
 
-    // OPCION 3
     private static void opcionPromedioEstudiante() {
-        System.out.print("Cedula del estudiante: "); String ced = sc.nextLine();
+        System.out.print("Cedula del estudiante: "); String ced = leerLinea();
         int idx = curso.buscar(ced);
         if (idx == -1) {
             System.out.println("No se encontro un estudiante con el numero de cedula indicado");
@@ -179,16 +175,16 @@ public class Main {
         }
     }
 
-    // OPCION 4
     private static void opcionPromedioCurso() {
         Double prom = curso.calcularPromedioGeneral();
         if (prom == null) System.out.println("No se han registrado calificaciones de estudiantes");
         else System.out.println("Promedio general del curso: " + prom);
     }
 
-    private static int leerInt() { try { return Integer.parseInt(sc.nextLine()); } catch (Exception ex) { return -1; } }
-    private static double leerDouble() { try { return Double.parseDouble(sc.nextLine()); } catch (Exception ex) { return -1; } }
-    private static boolean preguntar(String msg) { System.out.print(msg); String r = sc.nextLine().toLowerCase(); return r.equals("s") || r.equals("si"); }
+    private static String leerLinea() { if (!sc.hasNextLine()) return ""; return sc.nextLine(); }
+    private static int leerInt() { try { return Integer.parseInt(leerLinea()); } catch (Exception ex) { return -1; } }
+    private static double leerDouble() { try { return Double.parseDouble(leerLinea()); } catch (Exception ex) { return -1; } }
+    private static boolean preguntar(String msg) { System.out.print(msg); String r = leerLinea().toLowerCase(); return r.equals("s") || r.equals("si"); }
 }
 
 

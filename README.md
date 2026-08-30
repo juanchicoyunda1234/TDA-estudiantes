@@ -22,7 +22,8 @@ Implementación de una aplicación de consola para la gestión de los datos de l
    2 Registro de calificaciones.
    3 Determinar el promedio de notas de un estudiante.
    4 Determinar el promedio de notas del curso.
-   Teclee su opción (1-4)
+   5 Salir.
+   Teclee su opción (1-5)
    ```
 
 ### Comportamiento del Sistema por Opción
@@ -35,11 +36,16 @@ Implementación de una aplicación de consola para la gestión de los datos de l
   - **Validaciones:**
     - Si ya se registraron los 20 estudiantes (cupo máximo), no se permitirá insertar nuevos registros.
     - Si no hay estudiantes registrados, no se permitirá intentar eliminar registros.
+    - La cédula debe tener exactamente **10 dígitos numéricos**.
+    - Nombres y apellidos son obligatorios.
+    - La fecha de nacimiento usa formato **dd/MM/yyyy** y no puede ser futura.
+    - No se permiten cédulas duplicadas.
 
 - **Opción 2: Registro de calificaciones**
   - Solicita el número de cédula del estudiante:
     - **Si el estudiante está registrado:** Muestra sus datos personales (nombres, apellidos y edad) junto con el listado de calificaciones previamente registradas. Permite insertar nuevas calificaciones (tantas como el usuario desee hasta el tope de 7), así como modificar o eliminar calificaciones existentes mediante su índice.
-    - Si se alcanza el límite máximo de 7 notas, el sistema notificará que se han ingresado todas las calificaciones posibles y dará por terminado el proceso.
+    - Cada nota debe estar en el rango **0 a 10**.
+    - Si se alcanza el límite máximo de 7 notas, el sistema notificará que se han ingresado todas las calificaciones posibles y dará por terminado el proceso de inserción. Se puede seguir modificando o eliminando notas existentes.
     - **Si el estudiante no existe:** Notifica oportunamente al usuario y le da la opción de ingresar otro número de cédula o regresar al menú principal.
 
 - **Opción 3: Determinar el promedio de notas de un estudiante**
@@ -50,6 +56,9 @@ Implementación de una aplicación de consola para la gestión de los datos de l
 - **Opción 4: Determinar el promedio de notas del curso**
   - Muestra el promedio general de calificaciones de todos los estudiantes del curso.
   - Si ningún estudiante tiene calificaciones registradas, muestra el mensaje: *"No se han registrado calificaciones de estudiantes"*.
+
+- **Opción 5: Salir**
+  - Termina la ejecución del programa. Una opción distinta de 1-5 se considera inválida y el menú se vuelve a mostrar.
 
 > **Nota:** Tanto el conjunto de estudiantes en el curso como el conjunto de notas por estudiante se almacenan y administran mediante vectores/arreglos.
 

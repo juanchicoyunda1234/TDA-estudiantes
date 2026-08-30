@@ -108,12 +108,8 @@ public:
         return true;
     }
 
-    Estudiante* listar() const {
-        Estudiante* listaActual = new Estudiante[tope];
-        for (int i = 0; i < tope; i++) {
-            listaActual[i] = estudiantes[i];
-        }
-        return listaActual;
+    Estudiante* listar() {
+        return estudiantes;
     }
 
     std::optional<double> calcularPromedioGeneral() const {

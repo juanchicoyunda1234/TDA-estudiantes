@@ -41,7 +41,6 @@ void listar() {
                       << lista[i].getNombres() << " " << lista[i].getApellidos()
                       << " | " << lista[i].getFechaNacimientoTexto()
                       << " | Edad: " << lista[i].calcularEdad() << "\n";
-        delete[] lista;
     }
 }
 
@@ -53,7 +52,8 @@ int main() {
         std::cout << "2.- Registro de calificaciones.\n";
         std::cout << "3.- Determinar el promedio de notas de un estudiante.\n";
         std::cout << "4.- Determinar el promedio de notas del curso.\n";
-        std::cout << "Teclee su opcion (1-4) otra para salir: ";
+        std::cout << "5.- Salir.\n";
+        std::cout << "Teclee su opcion (1-5): ";
         opcion = leerInt();
         if (opcion==1) {
             listar();
@@ -92,7 +92,7 @@ int main() {
                     }
                 } while(preguntar("Desea modificar otro? s/n: "));
             } else if (op==3) {
-                do{ if(curso.getTope()==0){ std::cout<<"No hay estudiantes.\n"; break; } std::cout<<"Autonumerico a eliminar: "; int idx=leerInt()-1; if(curso.eliminar(idx)) std::cout<<"Eliminado.\n"; else std::cout<<"Autonumerico no valido.\n"; } while(preguntar("Desea eliminar otro? s/n: "));
+                do{ if(curso.getTope()==0){ std::cout<<"No se permite eliminar, no hay estudiantes registrados.\n"; break; } std::cout<<"Autonumerico a eliminar: "; int idx=leerInt()-1; if(curso.eliminar(idx)) std::cout<<"Eliminado.\n"; else std::cout<<"Autonumerico no valido.\n"; } while(preguntar("Desea eliminar otro? s/n: "));
             }
         }
         else if (opcion==2) {
@@ -106,9 +106,8 @@ int main() {
                 do{
                     std::cout<<"\nCalificaciones:\n";
                     if(e->getTope()==0) std::cout<<" - sin notas -\n"; else { const double* n=e->getCalificaciones(); for(int i=0;i<e->getTope();i++) std::cout<<" "<<(i+1)<<". "<<n[i]<<"\n"; }
-                    if(e->getTope()>=7){ std::cout<<"Se han ingresado todas las calificaciones posibles\n"; break; }
                     std::cout<<"\n1. Insertar 2. Modificar 3. Eliminar 4. Volver\nOpcion: "; op=leerInt();
-                    if(op==1){ do{ if(e->getTope()>=7) break; std::cout<<"Nota (0-10): "; double no=leerDouble(); if(!e->registrarCalificacion(no)) std::cout<<"Nota no valida.\n"; else std::cout<<"Insertada.\n"; } while(preguntar("Otra? s/n: ")); }
+                    if(op==1){ do{ if(e->getTope()>=7){ std::cout<<"Se han ingresado todas las calificaciones posibles\n"; break; } std::cout<<"Nota (0-10): "; double no=leerDouble(); if(!e->registrarCalificacion(no)) std::cout<<"Nota no valida.\n"; else std::cout<<"Insertada.\n"; } while(preguntar("Otra? s/n: ")); }
                     else if(op==2){ std::cout<<"Indice a modificar: "; int im=leerInt()-1; std::cout<<"Nueva nota: "; double nm=leerDouble(); if(e->modificarCalificacion(im,nm)) std::cout<<"Modificada.\n"; else std::cout<<"Error.\n"; }
                     else if(op==3){ std::cout<<"Indice a eliminar: "; int ie=leerInt()-1; if(e->eliminarCalificacion(ie)) std::cout<<"Eliminada.\n"; else std::cout<<"Indice no valido.\n"; }
                     else break;
@@ -126,7 +125,11 @@ int main() {
             auto prom=curso.calcularPromedioGeneral();
             if(!prom.has_value()) std::cout<<"No se han registrado calificaciones de estudiantes\n";
             else std::cout<<"Promedio general del curso: "<<prom.value()<<"\n";
-        } else break;
-    } while(opcion>=1 && opcion<=4);
+        } else if (opcion==5) {
+            break;
+        } else {
+            std::cout << "Opcion no valida.\n";
+        }
+    } while (true);
     return 0;
 }

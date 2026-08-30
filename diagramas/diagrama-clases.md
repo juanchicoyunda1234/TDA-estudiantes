@@ -3,6 +3,7 @@
 ```mermaid
 classDiagram
     class Estudiante {
+        +MAX_CALIFICACIONES int = 7
         -String cedula
         -String nombres
         -String apellidos
@@ -30,6 +31,7 @@ classDiagram
     }
 
     class Curso {
+        +CAPACIDAD_MAXIMA int = 20
         -Estudiante[] estudiantes
         -int tope
         -int capacidad
