@@ -1,0 +1,22 @@
+# Java
+*.class
+Java/bin/
+bin/
+*.jar
+*.war
+*.ear
+
+# C++
+*.o
+*.obj
+*.exe
+programa
+*.out
+*.app
+
+# IDEs y SO
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
