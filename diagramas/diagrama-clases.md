@@ -1,24 +1,30 @@
-﻿```mermaid
+```mermaid
 classDiagram
-    class ClaseBase {
-        #atributoComun
-        +metodoAbstracto()*
+    class Estudiante {
+        -String cedula
+        -String nombres
+        -String apellidos
+        -LocalDate fechaNacimiento
+        -double[] calificaciones
+        -int tope
+        +Estudiante(cedula, nombres, apellidos, fechaNacimientoTexto)
+        +calcularEdad() int
+        +registrarCalificacion(nota) boolean
+        +modificarCalificacion(indice, nuevaNota) boolean
+        +eliminarCalificacion(indice) boolean
+        +getCalificaciones() double[]
+        +calcularPromedio() double
+        +tieneCalificaciones() boolean
     }
-    class ClaseHija1 {
-        -atributoPropio1
-        +metodoAbstracto()
+    class Curso {
+        -Estudiante[] estudiantes
+        -int tope
+        +insertar(estudiante) boolean
+        +eliminar(indice) boolean
+        +obtener(indice) Estudiante
+        +buscar(cedula) int
+        +listar() Estudiante[]
+        +calcularPromedioGeneral() Double
     }
-    class ClaseHija2 {
-        -atributoPropio2
-        +metodoAbstracto()
-    }
-    class Gestor {
-        -ClaseBase[] elementos
-        -int cantidad
-        +registrar(ClaseBase) boolean
-        +mostrarTodos()
-    }
-    ClaseBase <|-- ClaseHija1
-    ClaseBase <|-- ClaseHija2
-    Gestor o-- ClaseBase
+    Curso o-- Estudiante
 ```
