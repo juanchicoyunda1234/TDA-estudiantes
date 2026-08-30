@@ -1,7 +1,9 @@
+#ifndef ESTUDIANTE_CPP
+#define ESTUDIANTE_CPP
+
 #include <iostream>
 #include <string>
 #include <ctime>
-
 
 struct Fecha {
     int dia;
@@ -123,4 +125,7 @@ public:
     int getId() const { return Id; }
     void setId(int idAsignado) { this->Id = idAsignado; }
 };
+
+#endif // ESTUDIANTE_CPP
+
 
