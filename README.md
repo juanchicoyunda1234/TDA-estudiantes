@@ -1,7 +1,14 @@
 # TDA Estudiante
 
 ## Descripcion
-TDA Estudiante. Modela un estudiante (cedula, nombres, apellidos, fecha de nacimiento y calificaciones) y un curso que administra la coleccion de estudiantes. Permite registrar, modificar y eliminar calificaciones, calcular edad y promedios, e insertar, eliminar, buscar y listar estudiantes. El proyecto se implementa en Java y C++.
+TDA Estudiante. Modela un estudiante (cédula, nombres, apellidos, fecha de nacimiento y calificaciones) y un curso que administra la colección de estudiantes.
+
+### Especificaciones del sistema:
+- **Capacidad por estudiante:** Máximo 7 calificaciones por estudiante.
+- **Capacidad por curso:** Máximo 20 estudiantes por curso.
+- **Búsqueda:** Se realiza mediante el número de cédula del estudiante.
+- **Eliminación y modificación:** Se despliega una lista numerada con el ID/índice de cada registro para seleccionar el elemento a modificar o eliminar.
+- **Operaciones:** Permite registrar, modificar y eliminar calificaciones, calcular edad y promedios individuales y generales, e insertar, eliminar, buscar y listar estudiantes. Implementado en Java y C++.
 
 ## Estructura del proyecto
 Arquitectura modular en 3 paquetes/carpetas (implementada en Java y C++):
