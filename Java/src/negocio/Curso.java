@@ -24,12 +24,14 @@ public class Curso {
         if (tope >= capacidad || estudiante == null) {
             return false;
         }
+        if (buscar(estudiante.getCedula()) != -1) {
+            return false;
+        }
         estudiantes[tope] = estudiante;
         tope++;
         return true;
     }
 
-    // Metodo de busqueda por cedula
     public int buscar(String cedula) {
         if (cedula == null) {
             return -1;
@@ -42,7 +44,6 @@ public class Curso {
         return -1;
     }
 
-    // Metodo para obtener estudiante por indice
     public Estudiante obtener(int indice) {
         if (indice < 0 || indice >= tope) {
             return null;
@@ -50,7 +51,6 @@ public class Curso {
         return estudiantes[indice];
     }
 
-    // Metodo para eliminar estudiante por indice
     public boolean eliminar(int indice) {
         if (indice < 0 || indice >= tope) {
             return false;
@@ -63,23 +63,28 @@ public class Curso {
         return true;
     }
 
-    // Metodo para modificar estudiante por indice
     public boolean modificar(int indice, Estudiante nuevosDatos) {
         if (indice < 0 || indice >= tope || nuevosDatos == null) {
             return false;
         }
-        estudiantes[indice] = nuevosDatos;
+        int existente = buscar(nuevosDatos.getCedula());
+        if (existente != -1 && existente != indice) {
+            return false;
+        }
+        Estudiante actual = estudiantes[indice];
+        actual.setCedula(nuevosDatos.getCedula());
+        actual.setNombres(nuevosDatos.getNombres());
+        actual.setApellidos(nuevosDatos.getApellidos());
+        actual.setFechaNacimiento(nuevosDatos.getFechaNacimientoTexto());
         return true;
     }
 
-    // Listar todos los estudiantes registrados
     public Estudiante[] listar() {
         Estudiante[] listaActual = new Estudiante[tope];
         System.arraycopy(estudiantes, 0, listaActual, 0, tope);
         return listaActual;
     }
 
-    // Calcular promedio general de las notas del curso
     public Double calcularPromedioGeneral() {
         if (tope == 0) {
             return null;

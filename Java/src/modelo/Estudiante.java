@@ -5,8 +5,6 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-// Estudiante matriculado en el curso. Guarda sus datos personales y un vector
-// estatico de calificaciones (maximo 7, una por cada actividad de evaluacion).
 public class Estudiante {
 
     public static final int MAX_CALIFICACIONES = 7;
@@ -16,7 +14,6 @@ public class Estudiante {
     private String nombres;
     private String apellidos;
     private LocalDate fechaNacimiento;
-
     private double[] calificaciones;
     private int tope;
 
@@ -29,8 +26,6 @@ public class Estudiante {
         this.tope = 0;
     }
 
-    // --- Cedula: la valida por 10 digitos numericos,
-    //se usa para buscar al estudiante en todo el sistema.
     public String getCedula() {
         return cedula;
     }
@@ -68,8 +63,10 @@ public class Estudiante {
         return fechaNacimiento;
     }
 
-    // Recibo la fecha como texto (dd/MM/yyyy), pero se guarda como LocalDate para poder calcular
-    // la edad con Period en vez de hacerlo a mano con restas de anios.
+    public String getFechaNacimientoTexto() {
+        return fechaNacimiento.format(FORMATO_FECHA);
+    }
+
     public void setFechaNacimiento(String fechaNacimientoTexto) {
         LocalDate fecha;
         try {
@@ -91,9 +88,6 @@ public class Estudiante {
         return Period.between(fechaNacimiento, LocalDate.now()).getYears();
     }
 
-    // --- Calificaciones ---
-    // Aqui nota invalida o vector lleno son casos esperados del flujo
-    // del menu, no errores excepcionales, asi que el Main decide que mensaje mostrar.
     public boolean registrarCalificacion(double nota) {
         if (nota < 0 || nota > 10) {
             return false;
@@ -117,9 +111,6 @@ public class Estudiante {
         return true;
     }
 
-    // Al eliminar, desplazo todo lo que esta a la derecha del indice una
-    // posicion a la izquierda (mismo patron que insertar al inicio de un
-    // array, pero al reves), para no dejar huecos entre 0 y tope-1.
     public boolean eliminarCalificacion(int indice) {
         if (indice < 0 || indice >= tope) {
             return false;
@@ -133,14 +124,11 @@ public class Estudiante {
     }
 
     public double[] getCalificaciones() {
-        // Devuelvo una copia solo hasta tope: el resto del arreglo fisico
-        // son casillas vacias que a Main no le interesan.
         double[] copia = new double[tope];
         System.arraycopy(calificaciones, 0, copia, 0, tope);
         return copia;
     }
 
-    // NaN es el resultado real de 0.0/0, no lanza excepcion en Java
     public double calcularPromedio() {
         if (tope == 0) {
             return 0;

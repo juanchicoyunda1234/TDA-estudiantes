@@ -1,30 +1,30 @@
 #ifndef CURSO_CPP
 #define CURSO_CPP
 
-#include <iostream>
+#include <optional>
 #include <string>
 #include "../modelo/Estudiante.cpp"
 
 class Curso {
+public:
+    static const int CAPACIDAD_MAXIMA = 20;
+
 private:
     Estudiante* estudiantes;
     int tope;
     int capacidad;
 
 public:
-    // Constructor con capacidad por defecto de 20 estudiantes
-    Curso(int capacidadMaxima = 20) {
+    Curso(int capacidadMaxima = CAPACIDAD_MAXIMA) {
         this->capacidad = capacidadMaxima;
-        this->estudiantes = new Estudiante[capacidad];
+        this->estudiantes = new Estudiante[capacidadMaxima];
         this->tope = 0;
     }
 
-    // Destructor
     ~Curso() {
         delete[] estudiantes;
     }
 
-    // Constructor de copia
     Curso(const Curso& otro) {
         this->capacidad = otro.capacidad;
         this->tope = otro.tope;
@@ -34,7 +34,6 @@ public:
         }
     }
 
-    // Operador de asignacion
     Curso& operator=(const Curso& otro) {
         if (this != &otro) {
             delete[] this->estudiantes;
@@ -48,19 +47,25 @@ public:
         return *this;
     }
 
-    // Insertar un nuevo estudiante en el curso
-    bool insertar(Estudiante estudiante) {
-        if (tope < capacidad) {
-            estudiante.setId(tope + 1);
-            estudiantes[tope] = estudiante;
-            tope++;
-            return true;
+    bool insertar(const Estudiante& estudiante) {
+        if (tope >= capacidad) {
+            return false;
         }
-        return false;
+        if (estudiante.getCedula().empty()) {
+            return false;
+        }
+        if (buscar(estudiante.getCedula()) != -1) {
+            return false;
+        }
+        estudiantes[tope] = estudiante;
+        tope++;
+        return true;
     }
 
-    // Metodo de busqueda por cedula
     int buscar(const std::string& cedula) const {
+        if (cedula.empty()) {
+            return -1;
+        }
         for (int i = 0; i < tope; i++) {
             if (estudiantes[i].getCedula() == cedula) {
                 return i;
@@ -69,68 +74,41 @@ public:
         return -1;
     }
 
-    // Metodo de busqueda por autonumerico/id
-    int buscarPorId(int id) const {
-        for (int i = 0; i < tope; i++) {
-            if (estudiantes[i].getId() == id) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    // Obtener estudiante por indice
     Estudiante* obtener(int indice) {
-        if (indice >= 0 && indice < tope) {
-            return &estudiantes[indice];
+        if (indice < 0 || indice >= tope) {
+            return nullptr;
         }
-        return nullptr;
+        return &estudiantes[indice];
     }
 
-    // Metodo para eliminar por indice
     bool eliminar(int indice) {
-        if (indice >= 0 && indice < tope) {
-            for (int i = indice; i < tope - 1; i++) {
-                estudiantes[i] = estudiantes[i + 1];
-            }
-            tope--;
-            return true;
+        if (indice < 0 || indice >= tope) {
+            return false;
         }
-        return false;
+        for (int i = indice; i < tope - 1; i++) {
+            estudiantes[i] = estudiantes[i + 1];
+        }
+        tope--;
+        estudiantes[tope] = Estudiante();
+        return true;
     }
 
-    // Metodo para eliminar por id
-    bool eliminarPorId(int id) {
-        int indice = buscarPorId(id);
-        if (indice != -1) {
-            return eliminar(indice);
-        }
-        return false;
-    }
-
-    // Metodo para modificar por indice
     bool modificar(int indice, const Estudiante& nuevosDatos) {
-        if (indice >= 0 && indice < tope) {
-            int idActual = estudiantes[indice].getId();
-            estudiantes[indice] = nuevosDatos;
-            estudiantes[indice].setId(idActual);
-            return true;
+        if (indice < 0 || indice >= tope) {
+            return false;
         }
-        return false;
+        int existente = buscar(nuevosDatos.getCedula());
+        if (existente != -1 && existente != indice) {
+            return false;
+        }
+        estudiantes[indice].setCedula(nuevosDatos.getCedula());
+        estudiantes[indice].setNombres(nuevosDatos.getNombres());
+        estudiantes[indice].setApellidos(nuevosDatos.getApellidos());
+        estudiantes[indice].setFechaNacimiento(nuevosDatos.getFechaNacimientoTexto());
+        return true;
     }
 
-    // Metodo para modificar por id
-    bool modificarPorId(int id, const Estudiante& nuevosDatos) {
-        int indice = buscarPorId(id);
-        if (indice != -1) {
-            return modificar(indice, nuevosDatos);
-        }
-        return false;
-    }
-
-    // Listar: devuelve copia de los estudiantes actuales
     Estudiante* listar() const {
-        if (tope == 0) return nullptr;
         Estudiante* listaActual = new Estudiante[tope];
         for (int i = 0; i < tope; i++) {
             listaActual[i] = estudiantes[i];
@@ -138,24 +116,31 @@ public:
         return listaActual;
     }
 
-    // Calcular promedio general del curso
-    double calcularPromedioGeneral() const {
-        if (tope == 0) return 0.0;
-
+    std::optional<double> calcularPromedioGeneral() const {
+        if (tope == 0) {
+            return std::nullopt;
+        }
         double sumaPromedios = 0.0;
         int estudiantesConNotas = 0;
         for (int i = 0; i < tope; i++) {
-            if (estudiantes[i].getCantidadNotas() > 0) {
+            if (estudiantes[i].tieneCalificaciones()) {
                 sumaPromedios += estudiantes[i].calcularPromedio();
                 estudiantesConNotas++;
             }
         }
-        if (estudiantesConNotas == 0) return 0.0;
+        if (estudiantesConNotas == 0) {
+            return std::nullopt;
+        }
         return sumaPromedios / estudiantesConNotas;
     }
 
-    int getTope() const { return tope; }
-    int getCapacidad() const { return capacidad; }
+    int getTope() const {
+        return tope;
+    }
+
+    int getCapacidad() const {
+        return capacidad;
+    }
 };
 
-#endif // CURSO_CPP
+#endif
